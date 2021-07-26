@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-public class ApiExceptionV2Controller {
+public class ApiExceptionV3Controller {
 
-    @GetMapping("/api2/members/{id}")
+    @GetMapping("/api3/members/{id}")
     public MemberDto getMember(@PathVariable("id") String id) {
         //"ex"가 전달이 되면 RuntimeException 발생
         if (id.equals("ex")) {

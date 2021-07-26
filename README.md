@@ -146,3 +146,31 @@ Spring Boot에서 API에 대한 예외 처리 학습
     - 그런데 파라미터 바인딩은 대부분 클라이언트가 HTTP 요청 정보를 잘못 호출해서 발생하는 문제이다.
     - `HTTP 에서는 이런 경우 HTTP 상태 코드 400을 사용하도록 되어 있다.`
     - DefaultHandlerExceptionResolver는 이것을 500 오류가 아니라 HTTP 상태 코드 400 오류로 변경한다.
+
+## @ControllerAdvice, @RestControllerAdvice
+
+1. `@ControllerAdvice`는 대상으로 지정한 여러 컨트롤러에 `@ExceptionHandler`, `@InitBinder` 기능을 부여해주는 역할을 한다.
+2. `@ControllerAdvice` 에 대상을 지정하지 않으면 모든 컨트롤러에 적용된다.(글로벌 적용)
+    - 대상 컨트롤러 지정 방법
+       ```java
+      // Target all Controllers annotated with @RestController(특정 어노테이션이 있는 컨트롤러)
+      @ControllerAdvice(annotations = RestController.class) 
+      public class ExampleAdvice1 {
+      
+      }
+
+      // Target all Controllers within specific packages(특정 패키지 하위에 있는 컨트롤러)
+      @ControllerAdvice("org.example.controllers") 
+      public class ExampleAdvice2 {
+      
+      }
+
+      // Target all Controllers assignable to specific classes(특정 클래스)
+      @ControllerAdvice(assignableTypes = {ControllerInterface.class, AbstractController.class}) 
+      public class ExampleAdvice3 {
+      
+      }
+       ```
+3. `@RestControllerAdvice`는 @ControllerAdvice와 같고, `@ResponseBody`가 추가되어 있다.
+    - @Controller와 @RestController의 차이와 같다.
+4. `@ExceptionHandler`와 `@ControllerAdvice`를 조합하면 예외를 깔끔하게 해결할 수 있다.
