@@ -86,6 +86,40 @@ Spring Boot에서 API에 대한 예외 처리 학습
 
 1. `@ExceptionHandler`를 처리한다.
     - API 예외 처리는 대부분 이 기능으로 해결한다.
+2. `@ExceptionHandler` 애노테이션을 선언하고, 해당 컨트롤러에서 처리하고 싶은 예외를 지정해주면 된다.
+    - 해당 컨트롤러에서 예외가 발생하면 `@ExceptionHandler`이 설정된 메서드가 호출된다.
+        - 참고로 지정한 예외 또는 그 예외의 자식 클래스는 모두 잡을 수 있다.
+3. 우선 순위
+    - 스프링의 우선순위는 항상 자세한 것이 우선권을 가진다. 예를 들어서 부모, 자식 클래스가 있고 다음과 같이 예외가 처리된다.
+       ```java
+       @ExceptionHandler(부모예외.class) 
+       public String 부모예외처리()(부모예외 e) {
+       }
+       
+       @ExceptionHandler(자식예외.class) 
+       public String 자식예외처리()(자식예외 e) {
+       }
+      ```
+    - @ExceptionHandler에 지정한 부모 클래스는 자식 클래스까지 처리할 수 있다.
+    - 따라서 `자식 예외`가 발생하면 `부모예외처리()`, `자식예외처리()` 둘 다 호출 대상이 된다.
+    - 그런데 둘 중 더 자세한 것이 우선권을 가지므로 `자식예외처리()`가 호출된다.
+3. 다음과 같이 다양한 예외를 처리할 수도 있다.
+   ```java
+   @ExceptionHandler({AException.class, BException.class}) 
+   public String ex(Exception e) { 
+        log.info("exception e", e); 
+   }
+   ```
+
+#### 실행 흐름
+
+1. (가정)컨트롤러 호출 결과 `IllegalArgumentException` 예외가 컨트롤러 밖으로 던져진다.
+2. 예외가 발생했으므로 `ExceptionResolver`가 작동한다.
+    - 가장 우선순위가 높은 `ExceptionHandlerExceptionResolver`가 실행된다.
+3. `ExceptionHandlerExceptionResolver`는 해당 컨트롤러에 IllegalArguementException을 처리할 수 있는 `@ExceptionHandler`가 있는지 확인한다.
+4. 만약에 존재한다면, 해당 @ExceptionHandler(메소드)를 실행하고, 컨트롤러가 @RestController인 경우 HTTP 컨버터가 사용되어 응답이 JSON으로 반환된다.
+5. 또한, @ResponseStatus를 설정한 경우 HTTP 상태 코드도 같이 응답한다.
+    - `@ResponseStatus(HttpStatus.BAD_REQUEST)`
 
 ### ResponseStatusExceptionResolver
 
