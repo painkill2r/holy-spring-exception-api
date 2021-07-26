@@ -64,3 +64,13 @@ Spring Boot에서 API에 대한 예외 처리 학습
 3. API 응답 처리
     - `response.getWriter().println("hello);` 처럼 HTTP 응답 Body에 직접 데이터를 넣어주는 것도 가능하다.
     - 여기에 JSON으로 응답하면 API 응답 처리를 할 수 있다.
+
+### ExceptionResolver에서 예외를 마무리 하기
+
+1. 기존에는 예외가 발생하면 WAS까지 예외가 던져지고, WAS에서 오류 페이지 정를 찾아서 다시 `/error`를 호출하였다.
+    - 생각해보면 과정이 너무 복잡하다.
+2. ExceptionResolver을 활용하면 복잡한 과정 없이 예외를 깔끔하게 해결할 수 있다.
+    - 컨트롤러에서 예외가 발생해도 ExceptionResolver에서 예외를 처리해 버린다.
+    - 따라서 예외가 발생해도 서블릿 컨테이너까지 예외가 전달되지 않고, 스프링 MVC에서 예외 처리는 끝이 난다.
+    - 결과적으로 WAS 입장에서는 정상 처리가 된 것이다.
+    - `이렇게 예외를 ExceptionResolver에서 처리할 수 있다는 것이 핵심이다.`

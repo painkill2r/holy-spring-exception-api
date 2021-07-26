@@ -22,6 +22,8 @@ public class MyHandlerExceptionResolver implements HandlerExceptionResolver {
      */
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        log.info("call resolver", ex);
+
         try {
             //발생한 예외가 IllegalArgumentException 타입인 경우
             if (ex instanceof IllegalArgumentException) {
