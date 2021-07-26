@@ -102,6 +102,7 @@ Spring Boot에서 API에 대한 예외 처리 학습
         - @ResponseStatus는 개발자가 직접 변경할 수 없는 예외에는 적용할 수 없다.(라이브러리 예외 코드 등)
         - 추가로 애노테이션을 사용하기 때문에 조건에 따라 동적으로 변경하는 것도 어렵다.
         - 이때는 ResponseStatusException 예외를 사용하면 된다.
+        - `throw new ResponseStatusException(HttpStatus.NOT_FOUND, "error.bad", new IllegalArgumentException());`
 
 ### DefaultHandlerExceptionResolver
 
