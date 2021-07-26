@@ -25,7 +25,7 @@ Spring Boot에서 API에 대한 예외 처리 학습
 2. 하지만 API는 각 오류 상황에 맞는 `오류 응답 스펙`을 정하고, JSON으로 데이터를 내려주어야 한다.
     - 클라이언트는 정상 요청이든, 오류 요청이든 JSON이 반환되기를 기대한다.
 
-### 스브링 부트 기본 오류 처리
+### 스프링 부트 기본 오류 처리
 
 1. 스프링 부트의 기본 설정은 오류 발생시 `/error`를 오류 페이지로 요청하고, `BasicErrorController`는 이 경로를 기본으로 받는다.
     - server.error.path로 수정 가능(기본 값: /error)
@@ -38,3 +38,13 @@ Spring Boot에서 API에 대한 예외 처리 학습
        server.error.include-message=always
        server.error.include-stacktrace=always
        ```
+
+### 정리
+
+1. 스프링 부트가 제공하는 `BasicErrorController`는 HTML 페이지를 제공하는 경우에는 매우 편리하다.
+2. 하지만 API 오류 처리는 각 API 마다 각각의 컨트롤러나 예외마다 서로 다른 응답 결과를 출력해야 할 수도 있다.
+    - 예를 들어서 회원과 관련된 API에서 예외가 발생할 때 응답과, 상품과 관련된 API에서 발생하는 예외에 따라 그 결과가 달라질 수 있다.
+3. 결과적으로 API 예외 처리는 매우 세밀하고 복잡하다.
+4. 따라서 BasicErrorController를 이용하는 방법은 HTML 화면을 처리할 때 사용하고, API의 오류 처리는 뒤에서 설명할 `@ExceptionHandler`를 이용하자.
+
+## HandlerExceptionResolver
