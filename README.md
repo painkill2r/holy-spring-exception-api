@@ -74,3 +74,35 @@ Spring Boot에서 API에 대한 예외 처리 학습
     - 따라서 예외가 발생해도 서블릿 컨테이너까지 예외가 전달되지 않고, 스프링 MVC에서 예외 처리는 끝이 난다.
     - 결과적으로 WAS 입장에서는 정상 처리가 된 것이다.
     - `이렇게 예외를 ExceptionResolver에서 처리할 수 있다는 것이 핵심이다.`
+
+## 스프링이 제공하는 ExceptionResolver
+
+1. 스프링 부트가 기본으로 제공하는 ExceptionResolver는 다음과 같다. `HandlerExceptionResolverComposite`에 다음 순서데로 등록된다.
+    - ExceptionHandlerExceptionResolver
+    - ResponseStatusExceptionResolver
+    - DefaultHandlerExceptionResolver(우선 순위가 가장 낮음)
+
+### ExceptionHandlerExceptionResolver
+
+1. `@ExceptionHandler`를 처리한다.
+    - API 예외 처리는 대부분 이 기능으로 해결한다.
+
+### ResponseStatusExceptionResolver
+
+1. 예외에 따라서 HTTP 상태 코드와 오류 메시지를를 지정해 주는 역할을 한다.
+    - `@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "잘못된 요청 오류")`
+        - reason을 `MessageSource`에서 찾는 기능도 제공한다.(reason = "error.bad")
+         ```properties
+         #messages.properties
+         error.bad=잘못된 요청 오류입니다. 메시지 사용
+         ```
+2. 다음 두가지 경우를 처리한다.
+    - @ResponseStatus가 달려 있는 예외
+    - ResponseStatusException 예외
+        - @ResponseStatus는 개발자가 직접 변경할 수 없는 예외에는 적용할 수 없다.(라이브러리 예외 코드 등)
+        - 추가로 애노테이션을 사용하기 때문에 조건에 따라 동적으로 변경하는 것도 어렵다.
+        - 이때는 ResponseStatusException 예외를 사용하면 된다.
+
+### DefaultHandlerExceptionResolver
+
+1. 스프링 내부 기본 예외를 처리한다.
