@@ -48,3 +48,19 @@ Spring Boot에서 API에 대한 예외 처리 학습
 4. 따라서 BasicErrorController를 이용하는 방법은 HTML 화면을 처리할 때 사용하고, API의 오류 처리는 뒤에서 설명할 `@ExceptionHandler`를 이용하자.
 
 ## HandlerExceptionResolver
+
+1. 스프링 MVC는 컨트롤러(핸들러) 밖으로 예외가 던져진 경우 예외를 해결하고, 동작을 새로 정의할 수 있는 방법을 제공한다.
+2. 컨트롤러 밖으로 던져진 예외를 해결하고, 동작 방식을 변경하고 싶으면 `HandlerExceptionResolver`를 사용하면 된다.
+    - 줄여서 `ExceptionHandler`라고 한다.
+3. 참고로 ExceptionResolver로 예외를 해결해도 `Interceptor의 postHandle()`은 호출되지 않는다.
+
+### ExceptionResolver 활용
+
+1. 예외 상태 코드 변환
+    - 예외를 `response.sendError(...)` 호출로 변경한 후 서블릿에서 상태 코드에 따른 오류를 처리하도록 위임
+    - 이후 WAS는 서블릿 오류 페이지를 찾아서 내부 호출(예를 들어, 스프링 부트가 기본으로 설정한 `/error`)
+2. 뷰 템플릿 처리
+    - `ModelAndView`에 값을 채워서 예외에 따른 새로운 오류 화면을 뷰 렌더링 해서 고객에게 제공
+3. API 응답 처리
+    - `response.getWriter().println("hello);` 처럼 HTTP 응답 Body에 직접 데이터를 넣어주는 것도 가능하다.
+    - 여기에 JSON으로 응답하면 API 응답 처리를 할 수 있다.
