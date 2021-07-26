@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * 스프링 부트가 제공하는 기능을 통해 오류 페이지 등록
  */
-@Component
+//@Component // 스프링 부트가 제공하는 기본 오류 매커니즘(BasicErrorController)을 사용하기 위해 주석 처리
 public class WebServerCustomizer implements WebServerFactoryCustomizer<ConfigurableWebServerFactory> {
 
     /**
